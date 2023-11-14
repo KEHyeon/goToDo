@@ -1,5 +1,4 @@
-module todo
-
+module go-api
 go 1.21.4
 
 require (
