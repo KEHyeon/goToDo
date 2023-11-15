@@ -1,7 +1,7 @@
-package dblayer
+package service
 
 import "go-api/todolist/models"
 
-type DBLayer interface {
+type TodoService interface {
 	GetAllTodo() ([]models.Todo, error)
 }

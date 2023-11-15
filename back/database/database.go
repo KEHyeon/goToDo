@@ -1,7 +1,10 @@
 package database
 
 import (
+	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type dbInfo struct {
@@ -12,13 +15,21 @@ type dbInfo struct {
 	database string
 }
 
-var db = dbInfo{
-	os.Getenv("DBUSER"),
-	os.Getenv("DBPWD"),
-	os.Getenv("DBURL"),
-	os.Getenv("DBENGINE"),
-	os.Getenv("DBNAME"),
+func getDbInfo() (dbInfo) {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	return dbInfo{
+		os.Getenv("DBUSER"),
+		os.Getenv("DBPWD"),
+		os.Getenv("DBURL"),
+		os.Getenv("DBENGINE"),
+		os.Getenv("DBNAME"),
+	}
 }
-
-var DataSource = db.user + ":" + db.pwd +
+func DataSource() string{
+	db := getDbInfo()
+	return db.user + ":" + db.pwd +
 	"@tcp(" + db.url + ")/" + db.database
+}

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	todo_rest "go-api/todolist/rest"
+	controller "go-api/todolist/contorller"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,6 +9,6 @@ import (
 func Run(address string) error {
 	router := gin.Default()
 	v1 := router.Group("/")
-	todo_rest.AddContentRoutes(v1)
+	controller.GetTodoRoutes(v1)
 	return router.Run(address)
 }

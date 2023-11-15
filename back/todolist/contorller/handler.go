@@ -1,15 +1,19 @@
-package rest
+package controller
 
 import (
 	"go-api/database"
-	"go-api/todolist/dblayer"
+	"go-api/todolist/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	db dblayer.DBLayer
+	db service.TodoService
+}
+
+type HandlerInterface interface {
+	GetAllTodo(c *gin.Context)
 }
 
 func (h *Handler) GetAllTodo(c *gin.Context) {
@@ -24,17 +28,12 @@ func (h *Handler) GetAllTodo(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, todoList)
 
-	
-}
-type HandlerInterface interface {
-	GetAllTodo(c *gin.Context)
-	GetContent(c *gin.Context)
 }
 
-func NewHandler() (HandlerInterface, error) {
-	dsn := database.DataSource
+func GetHandler() (HandlerInterface, error) {
+	dsn := database.DataSource()
 
-	db, err := dblayer.NewORM("mysql", dsn)
+	db, err := service.GetTodoService("mysql", dsn)
 	if err != nil {
 		return nil, err
 	}
