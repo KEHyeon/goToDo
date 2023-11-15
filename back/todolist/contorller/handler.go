@@ -9,35 +9,32 @@ import (
 )
 
 type Handler struct {
-	db service.TodoService
+	todoService service.TodoService
 }
 
 type HandlerInterface interface {
 	GetAllTodo(c *gin.Context)
 }
 
-func (h *Handler) GetAllTodo(c *gin.Context) {
-	if h.db == nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "dsn 오류"})
-		return
+
+func GetHandler() (HandlerInterface, error) {
+	dsn := database.DataSource()
+
+	todoService, err := service.GetTodoService("mysql", dsn)
+	if err != nil {
+		return nil, err
 	}
-	todoList, err := h.db.GetAllTodo()
+	return &Handler{
+		todoService: todoService,
+	}, nil
+}
+
+
+func (h *Handler) GetAllTodo(c *gin.Context) {
+	todoList, err := h.todoService.GetAllTodo()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, todoList)
-
-}
-
-func GetHandler() (HandlerInterface, error) {
-	dsn := database.DataSource()
-
-	db, err := service.GetTodoService("mysql", dsn)
-	if err != nil {
-		return nil, err
-	}
-	return &Handler{
-		db: db,
-	}, nil
 }

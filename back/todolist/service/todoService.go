@@ -25,12 +25,12 @@ func GetTodoService(dbengine string, dsn string) (*DBORM, error) {
 	}, err
 }
 
-func (db *DBORM) GetAllTodo() (todoList []models.Todo, err error) {
-	return todoList, db.Find(&todoList).Error
+func (db *DBORM) GetAllTodo() ([]models.Todo, error) {
+	var todoList []models.Todo
+	results := db.Find(&todoList);
+	return todoList, results.Error
 }
 
-func (db *DBORM) CreateTodo(todo models.Todo) (todo models.Todo, err error) {
-	const user = &Todo{
-
-	}
-}
+// func (db *DBORM) CreateTodo(todo models.Todo)  models.Todo, error) {
+// 	return todo, db.Create(todo).Error
+// }
