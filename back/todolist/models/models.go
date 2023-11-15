@@ -2,9 +2,10 @@ package models
 
 type Todo struct {
 	ID        uint
-	title     string
+	Title     string
 	Content   string
-	isChecked bool
+	IsChecked bool
+	CreatedAt string
 }
 
 func (Todo) TableName() string {

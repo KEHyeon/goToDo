@@ -3,8 +3,9 @@ package controller
 import "github.com/gin-gonic/gin"
 
 func GetTodoRoutes(rg *gin.RouterGroup) {
-	content := rg.Group("/todo")
+	todo := rg.Group("/todo")
 	h, _ := GetHandler()
 
-	content.GET("", h.GetAllTodo)
+	todo.GET("", h.GetAllTodo)
+	todo.POST("", h.CreateTodo)
 }

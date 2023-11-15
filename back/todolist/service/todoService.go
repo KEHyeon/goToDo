@@ -31,6 +31,6 @@ func (db *DBORM) GetAllTodo() ([]models.Todo, error) {
 	return todoList, results.Error
 }
 
-// func (db *DBORM) CreateTodo(todo models.Todo)  models.Todo, error) {
-// 	return todo, db.Create(todo).Error
-// }
+func (db *DBORM) CreateTodo(todo models.Todo) (models.Todo, error) {
+	return todo, db.Create(&todo).Error
+}
