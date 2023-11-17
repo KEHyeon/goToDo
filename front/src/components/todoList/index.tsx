@@ -21,6 +21,7 @@ const TodoList = () => {
   return (
     <S.Contain>
       {todoList.map((data) => {
+        console.log(data);
         return <TodoItem todo={data}></TodoItem>;
       })}
     </S.Contain>
