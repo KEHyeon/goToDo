@@ -8,6 +8,7 @@ export const Contain = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  width: 100%;
 `;
 export const Title = styled.div`
   background-color: green;

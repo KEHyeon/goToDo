@@ -2,6 +2,7 @@ import axios from "axios";
 import * as S from "./index.style";
 import { useEffect, useState } from "react";
 import TodoItem from "./todoItem";
+import Input from "./todoInput";
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState([]);
@@ -24,6 +25,7 @@ const TodoList = () => {
         console.log(data);
         return <TodoItem todo={data}></TodoItem>;
       })}
+      <Input />
     </S.Contain>
   );
 };

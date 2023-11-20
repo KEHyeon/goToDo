@@ -1,10 +1,11 @@
 import "./App.css";
-import TodoCard from "./components/todoList";
+import TodoList from "./components/todoList";
 
 function App() {
   return (
     <>
-      <TodoCard></TodoCard>
+      <h1>TODOLIST by TAE</h1>
+      <TodoList></TodoList>
     </>
   );
 }
