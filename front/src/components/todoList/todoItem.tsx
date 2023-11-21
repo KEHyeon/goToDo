@@ -10,8 +10,10 @@ const TodoItem = ({ todo }) => {
   };
   return (
     <S.Contain>
-      <S.Title>{title}</S.Title>
-      <S.Content>{content}</S.Content>
+      <S.Wrap>
+        <S.Title>{title}</S.Title>
+        <S.Content>{content}</S.Content>
+      </S.Wrap>
       <S.CheckBox onClick={togleChecked} isChecked={isChecked}></S.CheckBox>
     </S.Contain>
   );

@@ -2,7 +2,7 @@ import axios from "axios";
 import * as S from "./todoInput.style.ts";
 import { useState } from "react";
 
-const TodoInput = () => {
+const TodoInput = ({ setTodoList, todoList }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -12,11 +12,14 @@ const TodoInput = () => {
         alert("Fill out the form!");
         return;
       }
-      await axios.post("http://localhost:8080/todo", { title, content });
+      const res = await axios.post("http://localhost:8080/todo", {
+        title,
+        content,
+      });
       setTitle("");
       setContent("");
       alert("Success!");
-      window.location.reload();
+      setTodoList([...todoList, res.data]);
     } catch (error) {
       console.log(error);
     }
