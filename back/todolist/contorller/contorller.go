@@ -7,7 +7,7 @@ func GetTodoRoutes(rg *gin.RouterGroup) {
 	h, _ := GetHandler()
 	
 	todo.GET("", h.GetAllTodo)
-	todo.GET("[id]", h.GetOneTodo)
+	todo.GET(":id", h.GetOneTodo)
 	todo.POST("", h.CreateTodo)
-	todo.POST("[id]", h.ToggleTodo)
+	todo.POST("/toggle/:id", h.ToggleTodo)
 }

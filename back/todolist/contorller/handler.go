@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"go-api/database"
 	"go-api/todolist/models"
 	"go-api/todolist/service"
@@ -43,6 +44,7 @@ func (h *Handler) GetOneTodo(c *gin.Context) {
 }
 func (h *Handler) ToggleTodo(c *gin.Context) {
 	id, _ := strconv.ParseUint(c.Param("id"), 10, 0)
+	fmt.Print(id)
 	res, err := h.todoService.ToggleTodo(uint(id))
 	if(err != nil) {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
