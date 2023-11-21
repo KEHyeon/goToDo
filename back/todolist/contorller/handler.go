@@ -1,0 +1,62 @@
+package controller
+
+import (
+	"fmt"
+	"go-api/database"
+	"go-api/todolist/models"
+	"go-api/todolist/service"
+	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
+)
+
+type Handler struct {
+	todoService service.TodoService
+}
+
+type HandlerInterface interface {
+	GetAllTodo(c *gin.Context)
+	CreateTodo(c *gin.Context)
+}
+
+
+func GetHandler() (HandlerInterface, error) {
+	dsn := database.DataSource()
+	todoService, err := service.GetTodoService("mysql", dsn)
+	if err != nil {
+		return nil, err
+	}
+	return &Handler{
+		todoService: todoService,
+	}, nil
+}
+
+
+func (h *Handler) GetAllTodo(c *gin.Context) {
+	todoList, err := h.todoService.GetAllTodo()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, todoList)
+}
+
+func (h *Handler) CreateTodo(c *gin.Context) {
+	var todoData models.Todo
+	err := c.ShouldBindJSON(&todoData)
+	loc, _ := time.LoadLocation("Asia/Seoul")
+	todoData.CreatedAt = time.Now().In(loc).String()
+	
+	fmt.Print(todoData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	todo,err := h.todoService.CreateTodo(todoData)
+	if(err != nil) {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, todo)
+}
