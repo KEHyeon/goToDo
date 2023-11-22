@@ -41,4 +41,15 @@ func (h *Handler) Signup(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
-func (h *Handler) Signin(c *gin.Context) {}
+func (h *Handler) Signin(c *gin.Context) {
+	var user models.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	result, err := h.authService.Signin(user.Email, user.Password)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, result)
+		return
+	}
+	c.JSON(201, result)
+}
