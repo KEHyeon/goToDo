@@ -2,11 +2,11 @@ package models
 
 type User struct {
 	Id       uint   `gorm:"primaryKey" json:"id"`
-	email    string `gorm:"column:email" json:"email"`
-	password string `gorm:"column:password" json:"password"`
-	name     string `gorm:"column:name" json:"name"`
+	Email    string `gorm:"column:email;not null" json:"email"`
+	Password string `gorm:"column:password;not null" json:"password"`
+	Name     string `gorm:"column:name;not null" json:"name"`
 }
 
 func (User) TableName() string {
-	return "todo"
+	return "user"
 }
