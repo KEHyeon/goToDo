@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"go-api/auth/models"
+	"go-api/auth/utils"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/mysql"
@@ -65,6 +66,10 @@ func (db *DBORM) Signin(email string, password string) (string, error) {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return "", err
-	} 
-	return "success", nil
+	}
+	token, err := utils.CreateToken(uint64(user.Id))
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }
