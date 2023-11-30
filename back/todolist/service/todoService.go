@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"go-api/todolist/models"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -27,11 +28,33 @@ func GetTodoService(dbengine string, dsn string) (*DBORM, error) {
 	}, err
 }
 
-func (db *DBORM) GetAllTodo() ([]models.Todo, error) {
+func (db *DBORM) GetAllTodoWithDate(date string) ([]models.Todo, error) {
 	var todoList []models.Todo
-	results := db.Find(&todoList);
-	return todoList, results.Error
+
+	// 파싱할 때 KST 시간대를 명시적으로 지정
+	location, err := time.LoadLocation("Asia/Seoul")
+	if err != nil {
+		return todoList, err
+	}
+
+	startDate, err := time.ParseInLocation("2006-01-02", date, location)
+	if err != nil {
+		return todoList, err
+	}
+
+	// endDate를 계산할 때 startDate에 하루를 더합니다.
+	endDate := startDate.AddDate(0, 0, 1)
+	fmt.Print(startDate, endDate)
+	results := db.Where("created_at BETWEEN ? AND ?", startDate.String(), endDate.String()).Find(&todoList)
+
+	// 에러를 확인하고 반환합니다.
+	if results.Error != nil {
+		return todoList, results.Error
+	}
+
+	return todoList, nil
 }
+
 
 func (db *DBORM) CreateTodo(todo models.Todo) (models.Todo, error) {
 	return todo, db.Create(&todo).Error

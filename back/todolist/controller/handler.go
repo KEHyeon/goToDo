@@ -17,7 +17,7 @@ type Handler struct {
 }
 
 type HandlerInterface interface {
-	GetAllTodo(c *gin.Context)
+	GetAllTodoWithDate(c *gin.Context)
 	GetOneTodo(c *gin.Context)
 	ToggleTodo(c *gin.Context)
 	CreateTodo(c *gin.Context)
@@ -52,8 +52,8 @@ func (h *Handler) ToggleTodo(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-func (h *Handler) GetAllTodo(c *gin.Context) {
-	todoList, err := h.todoService.GetAllTodo()
+func (h *Handler) GetAllTodoWithDate(c *gin.Context) {
+	todoList, err := h.todoService.GetAllTodoWithDate(c.Param("date"))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -66,6 +66,7 @@ func (h *Handler) CreateTodo(c *gin.Context) {
 	err := c.ShouldBindJSON(&todoData)
 	loc, _ := time.LoadLocation("Asia/Seoul")
 	todoData.CreatedAt = time.Now().In(loc).String()
+	fmt.Println(todoData.CreatedAt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
