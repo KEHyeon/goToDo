@@ -3,11 +3,13 @@ import * as S from "./index.style";
 import { useEffect, useState } from "react";
 import TodoItem from "./todoItem";
 import Input from "./todoInput";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const TodoList = () => {
   const [todoList, setTodoList] = useState([]);
   const [visibleList, setVisibleTodoList] = useState([]);
   const [page, setPage] = useState(0);
+  const MAX = 5;
   const FetchTodoList = async () => {
     try {
       const res = await axios.get("http://localhost:8080/todo");
@@ -19,7 +21,7 @@ const TodoList = () => {
   const pagination = () => {
     setVisibleTodoList(
       todoList.filter((i, idx) => {
-        return idx >= page * 5 && idx < page * 5 + 5;
+        return idx >= page * MAX && idx < page * MAX + MAX;
       })
     );
   };
@@ -32,9 +34,40 @@ const TodoList = () => {
   }, [page, todoList]);
   return (
     <S.Contain>
-      {visibleList.map((data) => {
-        return <TodoItem todo={data}></TodoItem>;
-      })}
+      <DragDropContext
+        onDragEnd={(result) => {
+          if (!result.destination) {
+            return;
+          }
+          console.log(result);
+          const updatedList = [...visibleList];
+          const [removed] = updatedList.splice(result.source.index, 1);
+          updatedList.splice(result.destination.index, 0, removed);
+          setVisibleTodoList(updatedList);
+        }}
+      >
+        <Droppable droppableId="Todos">
+          {(provided) => (
+            <S.DraggableWrapper
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {visibleList.map((data: any, i) => (
+                <Draggable
+                  key={data.id}
+                  draggableId={data.id.toString()}
+                  index={i}
+                >
+                  {(provided) => (
+                    <TodoItem todo={data} provided={provided}></TodoItem>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </S.DraggableWrapper>
+          )}
+        </Droppable>
+      </DragDropContext>
       <S.ButtonWrapper>
         <div
           onClick={() => {
@@ -45,7 +78,7 @@ const TodoList = () => {
         </div>
         <div
           onClick={() => {
-            if ((page + 1) * 5 < todoList.length) setPage(page + 1);
+            if ((page + 1) * MAX < todoList.length) setPage(page + 1);
           }}
         >
           next

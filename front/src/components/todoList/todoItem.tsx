@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as S from "./todoItem.style";
 import axios from "axios";
-const TodoItem = ({ todo }) => {
+const TodoItem = ({ todo, provided }) => {
   const { id, title, content } = todo;
   const [isChecked, setIsChecked] = useState(todo.isChecked);
   const togleChecked = async () => {
@@ -10,8 +10,8 @@ const TodoItem = ({ todo }) => {
     console.log(isChecked);
   };
   return (
-    <S.Contain>
-      <S.Wrap>
+    <S.Contain ref={provided.innerRef} {...provided.draggableProps}>
+      <S.Wrap {...provided.dragHandleProps}>
         <S.Title>{title}</S.Title>
         <S.Content>{content}</S.Content>
       </S.Wrap>

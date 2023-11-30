@@ -42,4 +42,8 @@ export const CheckBox = styled.div`
   align-items: center;
   position: relative;
   right: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;

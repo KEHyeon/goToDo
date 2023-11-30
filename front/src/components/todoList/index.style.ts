@@ -12,12 +12,6 @@ export const Contain = styled.div`
 
 export const Description = styled.div``;
 
-export const CheckBox = styled.div`
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-around;
@@ -27,4 +21,12 @@ export const ButtonWrapper = styled.div`
       cursor: pointer;
     }
   }
+`;
+
+export const DraggableWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
